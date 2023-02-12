@@ -1,0 +1,276 @@
+#![allow(unused)]
+#![allow(non_snake_case)]
+
+use std::io::{BufRead, BufReader, Error, ErrorKind};
+use std::net::Ipv4Addr;
+use std::process::{Command, Stdio};
+use std::thread;
+use std::time::Duration;
+use std::env;
+use serde::{Serialize, Deserialize};
+
+// Structs
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Ip {
+    ip_address: String,
+    subnet_mask: String,
+}
+#[derive(Serialize, Deserialize, Debug)]
+pub struct Interface {
+    interface_name: String,
+    interface_metric: u16,
+    gateway: String,
+    gateway_metric: u16,
+    ip_is_dhcp: bool,
+    ip_and_masks: Vec<Ip>,
+    dns_is_dhcp: bool,
+    dns_server_1: String,
+    dns_server_2: String,
+}
+
+// Private Functions
+fn cmd(program: &str, args: &str) -> Result<Vec<String>, Error> {
+    let args_vec: Vec<&str> = args.split_whitespace().collect();
+    let stdout = Command::new(program)
+        .args(args_vec)
+        .stdout(Stdio::piped())
+        .spawn()?
+        .stdout
+        .ok_or_else(|| Error::new(ErrorKind::Other, "Could not capture standard output."))?;
+    let reader = BufReader::new(stdout);
+    let lines: Vec<String> = reader.lines().filter_map(|line| line.ok()).collect();
+    Ok(lines)
+}
+fn netsh_cmd(args: &str) -> Result<Vec<String>, Error> {
+    if env::consts::OS == "windows" {
+        let lines = cmd("netsh", args);
+        return lines;
+    }
+    else {
+        panic!("only run on windows");
+    }
+}
+fn netsh_cmd_bool(args: &str) -> bool {
+    let lines = netsh_cmd(args).unwrap();
+    let first_line = lines.get(0).unwrap();
+    
+    let mut success = false;
+    if first_line.trim() == "" {
+        success = true;
+    }
+    else {
+        success = false;
+    }
+    success
+}
+
+// Public Functions
+pub fn is_Ipv4Addr(ip: &str) -> bool {
+    return ip.parse::<Ipv4Addr>().is_ok();
+}
+pub fn get_interfaces() -> Vec<Interface> {
+    // netsh interface ipv4 show config
+    let lines = netsh_cmd("interface ipv4 show config").unwrap();
+
+    let mut nics: Vec<Interface> = vec![];
+    let mut new_interface = false;
+    let mut is_dns_server_2 = false;
+    let mut nic = Interface {
+        interface_name: String::new(),
+        interface_metric: 9999,
+        gateway: String::new(),
+        gateway_metric: 9999,
+        ip_is_dhcp: true,
+        ip_and_masks: vec![],
+        dns_is_dhcp: true,
+        dns_server_1: String::new(),
+        dns_server_2: String::new(),
+    };
+    let mut ip_and_mask = Ip {
+        ip_address: String::new(),
+        subnet_mask: String::new(),
+    };
+
+    for line in lines {
+        if line.trim().starts_with("Configuration for interface") {
+            new_interface = true;
+            let line_replace = line
+                .replace("\"", "")
+                .replace("Configuration for interface ", "");
+            nic.interface_name = line_replace;
+        }
+        else if line.trim().starts_with("InterfaceMetric:") {
+            let line_replace = line.replace("InterfaceMetric:", "");
+            nic.interface_metric = line_replace.trim().parse().unwrap();
+        }
+        else if line.trim().starts_with("DHCP enabled:") {
+            let line_replace = line.replace("DHCP enabled:", "");
+            match line_replace.trim() {
+                "No" => nic.ip_is_dhcp = false,
+                "Yes" => nic.ip_is_dhcp = true,
+                _ => nic.ip_is_dhcp = false,
+            }
+        }
+        else if line.trim().starts_with("IP Address:") {
+            let line_replace = line.trim().replace("IP Address:", "");
+            ip_and_mask.ip_address = line_replace.trim().to_string();
+        }
+        else if line.trim().starts_with("Subnet Prefix:") {
+            let clone = line.replace(")", "").clone();
+            let line_replace: Vec<&str> = clone.split("(mask ").collect();
+            ip_and_mask.subnet_mask = line_replace.get(1).unwrap().trim().to_string();
+            nic.ip_and_masks.push(ip_and_mask);
+            ip_and_mask = Ip {
+                ip_address: String::new(),
+                subnet_mask: String::new(),
+            };
+        }
+        else if line.trim().starts_with("Default Gateway:") {
+            let line_replace = line.trim().replace("Default Gateway:", "");
+            nic.gateway = line_replace.trim().to_string();
+        }
+        else if line.trim().starts_with("Gateway Metric:") {
+            let line_replace = line.trim().replace("Gateway Metric:", "");
+            nic.gateway_metric = line_replace.trim().parse().unwrap();
+        }
+        else if line.trim().starts_with("DNS servers configured through DHCP:") {
+            nic.dns_is_dhcp = true;
+            let line_replace = line.trim().replace("DNS servers configured through DHCP:", "");
+            if is_Ipv4Addr(line_replace.trim()) {
+                nic.dns_server_1 = line_replace.trim().to_string();
+                is_dns_server_2 = true;
+            }
+        }
+        else if line.trim().starts_with("Statically Configured DNS Servers:") {
+            nic.dns_is_dhcp = false;
+            let line_replace = line.trim().replace("Statically Configured DNS Servers:", "");
+            if is_Ipv4Addr(line_replace.trim()) {
+                nic.dns_server_1 = line_replace.trim().to_string();
+                is_dns_server_2 = true;
+            }
+        }
+        else if line.trim() == "" && new_interface == true {
+            nics.push(nic);
+            nic = Interface {
+                interface_name: String::new(),
+                interface_metric: 9999,
+                gateway: String::new(),
+                gateway_metric: 9999,
+                ip_is_dhcp: true,
+                ip_and_masks: vec![],
+                dns_is_dhcp: true,
+                dns_server_1: String::new(),
+                dns_server_2: String::new(),
+            };
+            ip_and_mask = Ip {
+                ip_address: String::new(),
+                subnet_mask: String::new(),
+            };
+        }
+        else {
+            if is_dns_server_2 && is_Ipv4Addr(line.trim()) {
+                nic.dns_server_2 = line.trim().to_string();
+            }
+            else {
+                // println!("{}", line);
+            }
+            is_dns_server_2 = false;
+        }
+    }
+    nics
+}
+pub fn set_ip_dhcp(interface: &str) -> bool {
+    // netsh interface ipv4 set address name="Ethernet" source=dhcp
+    let args = format!("interface ipv4 set address name=\"{interface}\" source=dhcp");
+    let success = netsh_cmd_bool(args.as_str());
+    success
+}
+pub fn set_ip_static(interface: &str, ip: &str, mask: &str, gateway: &str) -> bool {
+    // netsh interface ipv4 set address name="Ethernet" static 192.168.1.9 255.255.255.0 192.168.1.254
+    let args = format!("interface ipv4 set address name=\"{interface}\" static {ip} {mask} {gateway}");
+    let success = netsh_cmd_bool(args.as_str());
+    success
+}
+pub fn add_ip_static(interface: &str, ip: &str, mask: &str) -> bool {
+    // netsh interface ipv4 add address name="Ethernet" 192.168.2.9 255.255.255.0
+    let args = format!("interface ipv4 add address name=\"{interface}\" {ip} {mask}");
+    let success = netsh_cmd_bool(args.as_str());
+    success
+}
+pub fn set_dns_dhcp(interface: &str) -> bool {
+    // netsh interface ipv4 set dns name="Ethernet" source=dhcp
+    let args = format!("interface ipv4 set dns name=\"{interface}\" source=dhcp");
+    let success = netsh_cmd_bool(args.as_str());
+    success
+}
+pub fn set_dns_static(interface: &str, dns_1: &str, dns_2: &str) -> bool {
+    // netsh interface ipv4 set dns name="Ethernet" static 192.168.1.1
+    // netsh interface ipv4 add dns name="Ethernet" 1.1.1.1 index=2
+    let args_1 = format!("interface ipv4 set dns name=\"{interface}\" static {dns_1}");
+    let success_1 = netsh_cmd_bool(args_1.as_str());
+    let args_2 = format!("interface ipv4 add dns name=\"{interface}\" {dns_2} index=2");
+    let success_2 = netsh_cmd_bool(args_2.as_str());
+    success_1 && success_2
+}
+pub fn set_dhcp(interface: &str) -> bool {
+    let success_ip = set_ip_dhcp(interface);
+    let success_dns = set_dns_dhcp(interface);
+    success_ip && success_dns
+}
+pub fn set_static(interface: &str, ip: &str, mask: &str, gateway: &str, dns_1: &str, dns_2: &str) -> bool {
+    let success_ip = set_ip_static(interface, ip, mask, gateway);
+    let success_dns = set_dns_static(interface, dns_1, dns_2);
+    success_ip && success_dns
+}
+pub fn set_metric(interface: &str, metric: &str) -> bool {
+    // netsh interface ipv4 set interface "Ethernet" metric=25
+    let args = format!("interface ipv4 set interface \"{interface}\" metric={metric}");
+    let success = netsh_cmd_bool(args.as_str());
+    success
+}
+pub fn set_metric_auto(interface: &str) -> bool {
+    // netsh interface ipv4 set interface "Ethernet" metric=auto
+    let args = format!("interface ipv4 set interface \"{interface}\"metric=auto");
+    let success = netsh_cmd_bool(args.as_str());
+    success
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const GOOD_IPS: [&str; 5] = [
+        "0.0.0.0",
+        "1.1.1.1",
+        "10.10.0.100",
+        "0.0.0.255",
+        "255.255.255.255",
+    ];
+
+    const BAD_IPS: [&str; 4] = [
+        "192.168.1",
+        "192.168.1.300",
+        "192.168.x.1",
+        "192.168.010.001",
+    ];
+
+    #[test]
+    fn test_is_Ipv4Addr() {
+        for ip in GOOD_IPS {
+            assert_eq!(true, is_Ipv4Addr(ip));
+        }
+        for ip in BAD_IPS {
+            assert_eq!(false, is_Ipv4Addr(ip));
+        }
+    }
+
+    // #[test]
+    // #[should_panic]
+    // fn test_to_Ipv4Addr() {
+    //     // for ip in GOOD_IPS {
+    //     //     assert_eq!(true, is_Ipv4Addr(ip));
+    //     // }
+    //     assert_eq!(Ipv4Addr::new(0, 0, 0, 0), to_Ipv4Addr(GOOD_IPS[0]).unwrap());
+    //     // assert_eq!(Ipv4Addr::new(0, 0, 0, 0), to_Ipv4Addr(GOOD_IPS[0]).unwrap());
+    // }
+}
