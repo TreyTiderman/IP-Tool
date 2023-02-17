@@ -74,8 +74,8 @@
         "decorations": true,
         "fullscreen": false,
         "resizable": true,
-        "height": 500,
-        "width": 400,
+        "height": 800,
+        "width": 800,
         "minWidth": 480,
         "minHeight": 300
       }

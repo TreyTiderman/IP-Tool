@@ -25,7 +25,8 @@ if (settingsLocalStorage === null) {
         "isAlwaysOnTop": false,
         "windowDecorations": true,
         "startOnBoot": false,
-        "fixedColumns": true,
+        "fixedColumns": false,
+        "tableGridLines": false,
     };
     settings.set(settingsLocalStorage);
 }

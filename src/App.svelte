@@ -6,6 +6,7 @@
     // Components
     import Header from "./layout/Header.svelte";
     import Main from "./layout/Main.svelte";
+    
 
     // Debug
     $: console.log("global", $global);

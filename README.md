@@ -1,5 +1,10 @@
 # Testing Tauri
 
+## Setup
+```
+npm install
+```
+
 ## Run
 ```
 npm run tauri dev

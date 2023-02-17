@@ -16,6 +16,5 @@ pub fn move_mouse_test() {
 #[tauri::command]
 pub fn get_interfaces() -> String {
     let nics = netsh::get_interfaces();
-    println!("{:#?}", &nics);
     serde_json::to_string(&nics).unwrap()
 }

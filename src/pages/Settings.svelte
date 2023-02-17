@@ -91,6 +91,18 @@
                     </button>
                 </td>
             </tr>
+            <tr>
+                <td>tableGridLines</td>
+                <td>
+                    <button
+                        on:click={() => {
+                            $settings.tableGridLines = !$settings.tableGridLines;
+                        }}
+                    >
+                        {$settings.tableGridLines}
+                    </button>
+                </td>
+            </tr>
         </tbody>
     </table>
 </article>
