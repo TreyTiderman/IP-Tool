@@ -2,7 +2,7 @@
     import { global } from "../js/global";
 
     // Components
-    import IP_Presets from "../pages/IP_Presets.svelte";
+    import IP_Presets from "../pages/IPv4.svelte";
     import Routes from "../pages/Routes.svelte";
     import Settings from "../pages/Settings.svelte";
 </script>

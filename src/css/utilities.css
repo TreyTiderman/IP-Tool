@@ -218,7 +218,7 @@ button.flex {
 .fill { width: 100%; }
 .mono { font-family: var(--font-mono); }
 .error {
-  box-shadow: inset 0px 0px 0px 2px var(--color-bg-red);
+  box-shadow: inset 0px 0px 0px var(--border-thickness) var(--color-bg-red);
 }
 .error-message {
   margin-top: var(--pad);

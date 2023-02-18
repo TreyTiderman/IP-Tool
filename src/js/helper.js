@@ -339,6 +339,11 @@ export function validMetric(metric) {
   return validM;
 }
 
+// Clone (not perfect)
+export function clone(obj) {
+    return JSON.parse(JSON.stringify(obj))
+}
+
 // Sort array of objects by a key
 export function sortArrayByObjKey(array, key) {
   return array.sort((a, b) => {

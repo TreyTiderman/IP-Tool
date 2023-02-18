@@ -9,7 +9,15 @@
         position: { x: 0, y: 0 },
         size: { h: 0, w: 0 },
         showAtEvent: (event) => {
-            menu.position = { x: event.clientX, y: event.clientY };
+            if (event.pointerId === -1) {
+                console.log("showAtEvent", event);
+                console.log("target", event.target.getBoundingClientRect());
+                const buttonPosition = event.target.getBoundingClientRect();
+                menu.position = { x: buttonPosition.x, y: buttonPosition.y + buttonPosition.height };
+            }
+            else {
+                menu.position = { x: event.clientX, y: event.clientY };
+            }
             checkBounds();
             setTimeout(() => menu.show = true, 10);
         },
@@ -49,6 +57,9 @@
         menu.size.w = node.offsetWidth;
         checkBounds();
     }
+    function focus(element, bool) {
+        if (bool) element.focus();
+    }
 </script>
 
 <svelte:window
@@ -62,11 +73,11 @@
         style="position: absolute; top:{menu.position.y}px; left:{menu.position.x}px; z-index: 99"
     >
         <div class="navbar">
-            {#each items as item}
+            {#each items as item, index}
                 {#if item.text == "hr"}
                     <hr/>
                 {:else}
-                    <button class="flex" on:click={item.onClick}>
+                    <button use:focus={index === 0} class="flex nowrap" on:click={item.onClick}>
                         <i class={item.class}/>
                         <span>{item.text}</span>
                     </button>
@@ -80,6 +91,7 @@
     .navbar {
         display: flex;
         gap: var(--pad);
+        gap: 0;
         min-width: 15rem;
         background-color: var(--color-bg-section);
         border-radius: var(--radius-lg);
@@ -95,6 +107,6 @@
     hr {
         background-color: var(--color-border);
         margin: 0 auto;
-        /* margin: var(--pad) auto; */
+        margin: var(--pad) auto;
     }
 </style>
