@@ -1,12 +1,22 @@
 <script>
-    import { invoke } from "@tauri-apps/api/tauri";
+    import {
+        set_dhcp,
+        set_ip_static,
+        add_ip_static,
+        set_dns_static,
+    } from "../js/tauri";
     import InterfaceTableRow from "./InterfaceTableRow.svelte";
     import InterfaceTableRowEdit from "./InterfaceTableRowEdit.svelte";
+
+    // Event Dispatcher
+    import { createEventDispatcher } from "svelte";
+    import { settings } from "../js/settings";
+    const dispatch = createEventDispatcher();
 
     // Variables
     let interfaceEdit = false;
     let interfaceSelected = "default_198";
-    let interfaces = [
+    export let interfaces = [
         {
             interface_name: "Ethernet",
             interface_metric: 25,
@@ -56,6 +66,28 @@
                 on:confirm={(edit) => {
                     interfaceEdit = false;
                     console.log("edit confimed", edit.detail);
+                    for (let i = 0; i < edit.detail.ip_and_masks.length; i++) {
+                        const ip_and_mask = edit.detail.ip_and_masks[i];
+                        if (i === 0) {
+                            set_ip_static(
+                                edit.detail.interface_name,
+                                ip_and_mask.ip_address,
+                                ip_and_mask.subnet_mask,
+                                edit.detail.gateway
+                            );
+                        } else {
+                            add_ip_static(
+                                edit.detail.interface_name,
+                                ip_and_mask.ip_address,
+                                ip_and_mask.subnet_mask
+                            );
+                        }
+                    }
+                    set_dns_static(
+                        edit.detail.interface_name,
+                        edit.detail.dns_servers[0],
+                        edit.detail.dns_servers[1]
+                    );
                 }}
                 on:cancel={() => {
                     interfaceEdit = false;

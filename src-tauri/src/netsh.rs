@@ -15,6 +15,7 @@ pub struct Ip {
     ip_address: String,
     subnet_mask: String,
 }
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Interface {
     interface_name: String,

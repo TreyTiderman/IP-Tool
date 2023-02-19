@@ -22,6 +22,15 @@ fn main() {
             invoke::greet,
             invoke::move_mouse_test,
             invoke::get_interfaces,
+            invoke::set_ip_dhcp,
+            invoke::set_ip_static,
+            invoke::add_ip_static,
+            invoke::set_dns_dhcp,
+            invoke::set_dns_static,
+            invoke::set_dhcp,
+            invoke::set_static,
+            invoke::set_metric,
+            invoke::set_metric_auto,
         ])
         .plugin(tauri_plugin_autostart::init(MacosLauncher::LaunchAgent, Some(vec!["--flag1", "--flag2"])))
         .run(tauri::generate_context!())

@@ -9,8 +9,8 @@ html.light {
   --char-width: 80ch;
 
   /* Margin, Padding, Gap */ 
-  --pad: 0.7rem;
-  --gap: 1.2rem;
+  --pad: 0.5rem;
+  --gap: 1.0rem;
   --pad-input: var(--pad) calc(1.2*var(--pad));
 
   /* Colors */

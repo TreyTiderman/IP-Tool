@@ -68,6 +68,21 @@
                 </td>
             </tr>
             <tr>
+                <td>ipPollRate_ms</td>
+                <td>
+                    <input
+                        type="number"
+                        max="10000"
+                        min="200"
+                        placeholder="500"
+                        value={$settings.ipPollRate_ms}
+                        on:input={event => {
+                            $settings.ipPollRate_ms = event.target.value;
+                        }}
+                    />
+                </td>
+            </tr>
+            <tr>
                 <td>startOnBoot</td>
                 <td>
                     <button

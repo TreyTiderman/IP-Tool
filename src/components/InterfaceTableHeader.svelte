@@ -3,6 +3,10 @@
     import UpDown from "./UpDown.svelte";
     import ContextMenu from "./ContextMenu.svelte";
 
+    // Event Dispatcher
+    import { createEventDispatcher } from "svelte";
+    const dispatch = createEventDispatcher();
+
     // Variables
     let contextMenu;
     const table_state = {
@@ -16,7 +20,7 @@
         {
             text: "Refresh Interfaces",
             class: "fa-solid fa-arrows-rotate",
-            onClick: () => {},
+            onClick: () => dispatch("get_interfaces"),
         },
     ];
 </script>
@@ -35,8 +39,8 @@
         <th><span>Gateway</span></th>
         <th><span>DNS Server(s)</span></th>
         <th>
-            <button on:click={e => contextMenu.showAtEvent(e)}>
-                <i class="fa-solid fa-ellipsis-vertical"/>
+            <button on:click={(e) => contextMenu.showAtEvent(e)}>
+                <i class="fa-solid fa-ellipsis-vertical" />
             </button>
         </th>
     </tr>

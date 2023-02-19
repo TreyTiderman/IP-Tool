@@ -1,6 +1,5 @@
 <script>
-    import { invoke } from "@tauri-apps/api/tauri";
-    import { settings } from "../js/settings";
+    import { set_dhcp } from "../js/tauri";
     import ContextMenu from "../components/ContextMenu.svelte";
 
     // Event Dispatcher
@@ -39,6 +38,14 @@
             class: "fa-solid fa-pen-to-square",
             onClick: () => dispatch("edit"),
         },
+        {
+            text: "hr",
+        },
+        {
+            text: "Set DHCP",
+            class: "fa-solid fa-wand-magic-sparkles",
+            onClick: () => set_dhcp(nic.interface_name),
+        },
     ];
 </script>
 
@@ -58,7 +65,7 @@
 >
     <td>
         <div>
-            <span>{nic.interface_name}</span>
+            <span>{nic.interface_name} {nic.ip_is_dhcp ? "(DHCP)" : ""}</span>
         </div>
     </td>
     <td>

@@ -1,12 +1,11 @@
 <script>
-    import { invoke } from "@tauri-apps/api/tauri";
-    import { settings } from "../js/settings";
     import { clone, validIPv4, validMask } from "../js/helper";
+
+    // Components
     import ContextMenu from "../components/ContextMenu.svelte";
 
     // Event Dispatcher
     import { createEventDispatcher } from "svelte";
-    import { element } from "svelte/internal";
     const dispatch = createEventDispatcher();
 
     export let selected = true;
@@ -64,14 +63,12 @@
             text: "hr",
         },
         {
-            text: "Remove Blank IPs",
+            text: "Remove Blanks",
             class: "fa-solid fa-trash",
-            onClick: () => removeBlankIPs(),
-        },
-        {
-            text: "Remove Blank DNS servers",
-            class: "fa-solid fa-trash",
-            onClick: () => removeBlankDNS(),
+            onClick: () => {
+                removeBlankIPs();
+                removeBlankDNS();
+            },
         },
     ];
 
@@ -85,10 +82,12 @@
     }
     function addBlankIP() {
         removeBlankIPs();
-        edit.ip_and_masks.push({
-            ip_address: "",
-            subnet_mask: "",
-        });
+        if (edit.ip_and_masks.length < 5) {
+            edit.ip_and_masks.push({
+                ip_address: "",
+                subnet_mask: "",
+            });
+        }
     }
     function removeBlankDNS() {
         edit.dns_servers = edit.dns_servers.filter(
@@ -97,7 +96,9 @@
     }
     function addBlankDNS() {
         removeBlankDNS();
-        edit.dns_servers.push("");
+        if (edit.dns_servers.length < 2) {
+            edit.dns_servers.push("");
+        }
     }
     function confirm() {
         removeBlankIPs();
@@ -106,9 +107,6 @@
     }
     function cancel() {
         dispatch("cancel");
-    }
-    function updateInputWidth(event) {
-        event.target.style.width = event.target.value.length * 1.25 + "ch";
     }
 
     let validInterface = true;
@@ -142,7 +140,6 @@
                 validInterface = false;
             }
         }
-        console.log("validInterface", validInterface, edit);
     }
 </script>
 
@@ -162,7 +159,7 @@
 >
     <td>
         <div>
-            <span>{edit.interface_name}</span>
+            <span>{edit.interface_name} {nic.ip_is_dhcp ? "(DHCP)" : ""}</span>
         </div>
     </td>
     <td>
@@ -278,7 +275,8 @@
     tr {
         /* background-color: var(--color-bg-section); */
         /* color: var(--color-bg-red); */
-        box-shadow: inset 0px 0px 0px var(--border-thickness) var(--color-bg-red);
+        box-shadow: inset 0px 0px 0px var(--border-thickness)
+            var(--color-bg-red);
     }
     button,
     input {

@@ -95,10 +95,12 @@
         min-width: 15rem;
         background-color: var(--color-bg-section);
         border-radius: var(--radius-lg);
+        border-radius: var(--radius);
         overflow: hidden;
         border: var(--border);
         flex-direction: column;
         padding: var(--pad);
+        padding: calc(var(--pad)/2);
     }
     button {
         text-align: left;

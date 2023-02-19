@@ -27,6 +27,7 @@ if (settingsLocalStorage === null) {
         "startOnBoot": false,
         "fixedColumns": false,
         "tableGridLines": false,
+        "ipPollRate_ms": 1000,
     };
     settings.set(settingsLocalStorage);
 }

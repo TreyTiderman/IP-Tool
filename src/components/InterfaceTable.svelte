@@ -1,17 +1,42 @@
 <script>
+    import { get_interfaces } from "../js/tauri";
     import { settings } from "../js/settings";
     import InterfaceTableHeader from "../components/InterfaceTableHeader.svelte";
     import InterfaceTableBody from "../components/InterfaceTableBody.svelte";
+
+    let interfaces = [];
+
+    let interval;
+    import { onDestroy, onMount } from "svelte";
+    onMount(async () => {
+        interfaces = await get_interfaces();
+        interval = setInterval(async () => {
+            interfaces = await get_interfaces();
+        }, $settings.ipPollRate_ms);
+    });
+    onDestroy(async () => {
+        interfaces = await get_interfaces();
+        clearInterval(interval);
+    });
 </script>
 
 <!-- Interface Table -->
-<table 
+<table
     id="interface_table"
     class:fixedColumns={$settings.fixedColumns}
     class:tableGridLines={$settings.tableGridLines}
 >
-    <InterfaceTableHeader/>
-    <InterfaceTableBody/>
+    <InterfaceTableHeader
+        on:get_interfaces={async () => {
+            interfaces = await get_interfaces();
+        }}
+    />
+    <InterfaceTableBody
+        bind:interfaces
+        on:get_interfaces={async () => {
+            interfaces = await get_interfaces();
+        }}
+    />
 </table>
 
 <style>
@@ -20,19 +45,21 @@
     :global(.fixedColumns td) {
         min-width: 10.75rem;
     }
-    
+
     /* Setting tableGridLines */
     :global(.tableGridLines th),
     :global(.tableGridLines td) {
         border: var(--border);
         border-color: var(--color-text-dim);
         border: none;
-        box-shadow: inset 0px 0px 0px calc(var(--border-thickness)/2) var(--color-text-dim);
+        box-shadow: inset 0px 0px 0px calc(var(--border-thickness) / 2)
+            var(--color-text-dim);
     }
     :global(table.tableGridLines) {
         border: var(--border);
         border-color: var(--color-text-dim);
         border: none;
-        box-shadow: inset 0px 0px 0px var(--border-thickness) var(--color-text-dim);
+        box-shadow: inset 0px 0px 0px var(--border-thickness)
+            var(--color-text-dim);
     }
 </style>
