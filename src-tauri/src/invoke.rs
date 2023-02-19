@@ -14,6 +14,13 @@ pub fn move_mouse_test() {
 }
 
 #[tauri::command]
+pub fn is_admin() -> bool {
+    println!("is_admin");
+    let output = netsh::is_admin();
+    output
+}
+
+#[tauri::command]
 pub fn get_interfaces() -> String {
     // println!("get_interfaces");
     let output = netsh::get_interfaces();

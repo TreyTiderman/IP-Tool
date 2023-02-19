@@ -4,6 +4,7 @@
 use std::io::{BufRead, BufReader, Error, ErrorKind};
 use std::net::Ipv4Addr;
 use std::process::{Command, Stdio};
+use std::os::windows::process::CommandExt;
 use std::thread;
 use std::time::Duration;
 use std::env;
@@ -31,9 +32,12 @@ pub struct Interface {
 
 // Private Functions
 fn cmd(program: &str, args: &str) -> Result<Vec<String>, Error> {
+    const CREATE_NO_WINDOW: u32 = 0x08000000;
+    const DETACHED_PROCESS: u32 = 0x00000008;
     let args_vec: Vec<&str> = args.split_whitespace().collect();
     let stdout = Command::new(program)
         .args(args_vec)
+        .creation_flags(DETACHED_PROCESS)
         .stdout(Stdio::piped())
         .spawn()?
         .stdout
@@ -66,8 +70,26 @@ fn netsh_cmd_bool(args: &str) -> bool {
 }
 
 // Public Functions
+pub fn is_admin() -> bool {
+    if env::consts::OS == "windows" {
+        // cmd net session
+        let lines = cmd("net", "").unwrap();
+        // let lines = cmd("cmd", "net session").unwrap();
+        println!("cmd net session");
+        dbg!(&lines);
+        for line in lines {
+            // println!("{}", line);
+            // if line.trim().starts_with("Configuration for interface") {
+            // }
+        }
+        true
+    }
+    else {
+        panic!("only run on windows");
+    }
+}
 pub fn is_Ipv4Addr(ip: &str) -> bool {
-    return ip.parse::<Ipv4Addr>().is_ok();
+    ip.parse::<Ipv4Addr>().is_ok()
 }
 pub fn get_interfaces() -> Vec<Interface> {
     // netsh interface ipv4 show config

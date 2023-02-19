@@ -10,6 +10,11 @@ npm install
 npm run tauri dev
 ```
 
+## Build
+```
+npm run tauri build
+```
+
 ## TODO
 https://github.com/tauri-apps/tauri-plugin-log
 

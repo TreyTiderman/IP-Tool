@@ -1,5 +1,9 @@
 import { invoke } from "@tauri-apps/api/tauri";
 
+export async function is_admin() {
+    const output = await invoke("is_admin");
+    return output;
+}
 export async function get_interfaces() {
     const output = await invoke("get_interfaces");
     const interfaces_raw = JSON.parse(output);

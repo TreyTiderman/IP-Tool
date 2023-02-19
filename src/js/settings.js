@@ -1,15 +1,18 @@
 // Imports
 import { writable } from 'svelte/store'
 import { appWindow } from "@tauri-apps/api/window";
-// import { enable, disable } from "tauri-plugin-autostart-api";
+import { enable, disable, isEnabled } from "tauri-plugin-autostart-api";
 
 const settingsDefault = {
-    "fontSize": 16,
+    "fontSize": 14,
     "theme": "dark",
     "themes": ["dark", "light"],
     "isAlwaysOnTop": false,
-    "hasDecorations": true,
+    "windowDecorations": false,
     "startOnBoot": false,
+    "fixedColumns": false,
+    "tableGridLines": false,
+    "ipPollRate_ms": 1000,
 };
 
 // Export Store
@@ -19,11 +22,11 @@ export const settings = writable()
 let settingsLocalStorage = localStorage.getItem("settings");
 if (settingsLocalStorage === null) {
     settingsLocalStorage = {
-        "fontSize": 16,
+        "fontSize": 14,
         "theme": "dark",
         "themes": ["dark", "light"],
         "isAlwaysOnTop": false,
-        "windowDecorations": true,
+        "windowDecorations": false,
         "startOnBoot": false,
         "fixedColumns": false,
         "tableGridLines": false,
@@ -48,11 +51,17 @@ settings.subscribe(async settings => {
         document.documentElement.classList = settings.theme;
 
         if (settings.fontSize >= 8 && settings.fontSize <= 36) {
-            document.documentElement.style.fontSize = settings.fontSize + "px"
+            document.documentElement.style.fontSize = settings.fontSize + "px";
         }
 
-        // if (settings.startOnBoot) await enable()
-        // else await disable()
+        if (settings.startOnBoot) {
+            await enable();
+            settings.startOnBoot = await isEnabled();
+        }
+        else {
+            await disable();
+            settings.startOnBoot = await isEnabled();
+        }
 
         // Save settings to localStorage
         localStorage.setItem("settings", JSON.stringify(settings));

@@ -21,6 +21,7 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             invoke::greet,
             invoke::move_mouse_test,
+            invoke::is_admin,
             invoke::get_interfaces,
             invoke::set_ip_dhcp,
             invoke::set_ip_static,
@@ -32,7 +33,10 @@ fn main() {
             invoke::set_metric,
             invoke::set_metric_auto,
         ])
-        .plugin(tauri_plugin_autostart::init(MacosLauncher::LaunchAgent, Some(vec!["--flag1", "--flag2"])))
+        .plugin(tauri_plugin_autostart::init(
+            MacosLauncher::LaunchAgent,
+            Some(vec!["--flag1", "--flag2"]),
+        ))
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

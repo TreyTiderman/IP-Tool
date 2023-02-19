@@ -7,7 +7,7 @@
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "Tauri Test",
+    "productName": "IP-Tool",
     "version": "0.0.0"
   },
   "tauri": {
@@ -21,8 +21,8 @@
         "open": true,
         "scope": [
           {
-            "name": "ping",
-            "cmd": "ping",
+            "name": "net",
+            "cmd": "net",
             "args": true
           }
         ]
@@ -30,7 +30,7 @@
     },
     "bundle": {
       "active": true,
-      "category": "DeveloperTool",
+      "category": "Utility",
       "copyright": "",
       "deb": {
         "depends": []
@@ -43,7 +43,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "tauri.trey.app",
+      "identifier": "ip.trey.app",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
@@ -69,13 +69,13 @@
     },
     "windows": [
       {
-        "title": "Tauri Test",
+        "title": "IP-Tool",
         "visible": false,
         "decorations": true,
         "fullscreen": false,
         "resizable": true,
-        "height": 800,
-        "width": 800,
+        "height": 600,
+        "width": 600,
         "minWidth": 480,
         "minHeight": 300
       }
