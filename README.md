@@ -1,4 +1,13 @@
-# Testing Tauri
+# Windows IP Settings / Presets
+
+Quickly change and save network settings.
+For people that plug into a lot of networks
+
+## Download / Installer
+
+https://github.com/TreyTiderman/IP-Tool/releases/download/v0.1.0/IP-Tool_0.1.0_x64_en-US.msi
+
+# Source Code
 
 ## Setup
 ```
