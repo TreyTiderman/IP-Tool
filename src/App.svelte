@@ -2,32 +2,10 @@
     // Imports
     import { global } from "./js/global";
     import { settings } from "./js/settings";
-    import { Command } from "@tauri-apps/api/shell";
 
     // Components
     import Header from "./layout/Header.svelte";
     import Main from "./layout/Main.svelte";
-
-    // Check if app is ran as administrator
-    let isAdmin = true;
-    async function checkAdmin() {
-        const cmd = new Command("net", "session");
-        console.log(`command: net session`);
-        cmd.stdout.on("data", (line) => {
-            console.log(`command stdout: "${line}"`);
-        });
-        cmd.stderr.on("data", (line) => {
-            console.log(`command stdout: "${line}"`);
-            if (line.startsWith("System error 5 has occurred")) isAdmin = false;
-        });
-        await cmd.spawn();
-    }
-
-    // Startup
-    import { onMount } from "svelte";
-    onMount(async () => {
-        checkAdmin();
-    });
 
     // Debug
     $: console.log("global", $global);
@@ -35,11 +13,14 @@
 
 <div
     id="app"
-    style="border: {$settings.hasDecorations ? 'none' : 'var(--border)'}"
+    style="
+        border: {$settings.hasDecorations ? 'none' : 'var(--border)'};
+        border-color: {$global.isAdministrator ? ' ' : 'var(--color-bg-red)'};
+    "
 >
     <Header />
-    <div hidden={isAdmin}>
-        <i class="fa-solid fa-circle-exclamation"/>
+    <div hidden={$global.isAdministrator}>
+        <i class="fa-solid fa-circle-exclamation" />
         Run as Administrator in order to change settings
     </div>
     <Main />

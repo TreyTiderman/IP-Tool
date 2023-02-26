@@ -53,13 +53,13 @@
         border-color: var(--color-text-dim);
         border: none;
         box-shadow: inset 0px 0px 0px calc(var(--border-thickness) / 2)
-            var(--color-text-dim);
+            var(--color-border);
     }
     :global(table.tableGridLines) {
         border: var(--border);
         border-color: var(--color-text-dim);
         border: none;
         box-shadow: inset 0px 0px 0px var(--border-thickness)
-            var(--color-text-dim);
+            var(--color-border);
     }
 </style>
