@@ -40,26 +40,4 @@
 </table>
 
 <style>
-    /* Setting fixedColumns */
-    :global(.fixedColumns th),
-    :global(.fixedColumns td) {
-        min-width: 10.75rem;
-    }
-
-    /* Setting tableGridLines */
-    :global(.tableGridLines th),
-    :global(.tableGridLines td) {
-        border: var(--border);
-        border-color: var(--color-text-dim);
-        border: none;
-        box-shadow: inset 0px 0px 0px calc(var(--border-thickness) / 2)
-            var(--color-border);
-    }
-    :global(table.tableGridLines) {
-        border: var(--border);
-        border-color: var(--color-text-dim);
-        border: none;
-        box-shadow: inset 0px 0px 0px var(--border-thickness)
-            var(--color-border);
-    }
 </style>

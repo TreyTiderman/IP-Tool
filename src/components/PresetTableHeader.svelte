@@ -11,11 +11,26 @@
     let contextMenu;
     const contextMenuItems = [
         {
-            text: "Refresh Interfaces",
+            text: "New Preset",
+            class: "fa-solid fa-add",
+            onClick: () => dispatch("new"),
+        },
+        {
+            text: "hr",
+        },
+        {
+            text: "Reset Presets To Default",
             class: "fa-solid fa-arrows-rotate",
-            onClick: () => dispatch("get_interfaces"),
+            onClick: () => dispatch("reset"),
+        },
+        {
+            text: "Clear Presets",
+            class: "fa-solid fa-trash",
+            onClick: () => dispatch("clear"),
         },
     ];
+    // localStorage.removeItem("presets");
+    // location.reload(true);
 </script>
 
 <thead>
@@ -26,14 +41,14 @@
         on:any_contextmenu={() => contextMenu.hide()}
     />
     <tr>
-        <th><span>Interface</span></th>
+        <th><span>Preset</span></th>
         <th><span>IP Address(s)</span></th>
         <th><span>Subnet Mask(s)</span></th>
         <th><span>Gateway</span></th>
         <th><span>DNS Server(s)</span></th>
         <th>
             <button on:click={(e) => contextMenu.showAtEvent(e)}>
-                <i class="fa-solid fa-ellipsis-vertical" />
+                <i class="fa-solid fa-ellipsis-vertical"/>
             </button>
         </th>
     </tr>

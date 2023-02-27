@@ -7,7 +7,7 @@ import { enable, disable, isEnabled } from "tauri-plugin-autostart-api";
 export const settings = writable()
 
 // Get / Init settings
-const defautl_settings = {
+export const default_settings = {
     "fontSize": 16,
     "theme": "dark",
     "themes": ["dark", "light"],
@@ -16,23 +16,24 @@ const defautl_settings = {
     "startOnBoot": false,
     "fixedColumns": true,
     "tableGridLines": false,
+    "alternatingRowBG": false,
     "ipPollRate_ms": 1000,
 };
 let settingsLocalStorage = localStorage.getItem("settings");
 if (settingsLocalStorage === null || settingsLocalStorage === undefined || settingsLocalStorage === "") {
-    settingsLocalStorage = defautl_settings
-    console.log("NO stored settings. Setting to default", defautl_settings);
-    settings.set(defautl_settings);
-    localStorage.setItem("settings", JSON.stringify(defautl_settings));
+    settingsLocalStorage = default_settings
+    console.log("NO stored settings. Setting to default", default_settings);
+    settings.set(default_settings);
+    localStorage.setItem("settings", JSON.stringify(default_settings));
 }
 else {
     const settingsLocalStorageParsed = JSON.parse(settingsLocalStorage);
     settings.set(settingsLocalStorageParsed);
     settings.update(obj => {
-        Object.keys(defautl_settings).forEach(key => {
+        Object.keys(default_settings).forEach(key => {
             if (obj[key] === undefined) {
-                console.log(`Setting ${key} doesn't exist in localStorage. Set to default ${defautl_settings[key]}`);
-                obj[key] = defautl_settings[key];
+                console.log(`Setting ${key} doesn't exist in localStorage. Set to default ${default_settings[key]}`);
+                obj[key] = default_settings[key];
             }
         })
         return obj
@@ -41,7 +42,7 @@ else {
 
 // Every settings change set the values 
 settings.subscribe(async settings => {
-    if (settings !== undefined && settings != defautl_settings) {
+    if (settings !== undefined && settings != default_settings) {
         console.log("Settings updated", settings);
 
         // Update Settings

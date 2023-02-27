@@ -1,29 +1,19 @@
 <script>
     import { set_dhcp } from "../js/tauri";
-    import ContextMenu from "../components/ContextMenu.svelte";
+    import ContextMenu from "./ContextMenu.svelte";
 
     // Event Dispatcher
     import { createEventDispatcher } from "svelte";
     const dispatch = createEventDispatcher();
 
     export let selected = true;
-    export let nic = {
-        interface_name: "Ethernet",
-        interface_metric: 25,
-        gateway: "192.168.1.254",
-        gateway_metric: 1,
+    export let preset = {
+        name: "default_1",
+        gateway: "192.168.1.1",
         ip_is_dhcp: false,
         ip_and_masks: [
             {
-                ip_address: "192.168.1.9",
-                subnet_mask: "255.255.255.0",
-            },
-            {
-                ip_address: "192.168.3.9",
-                subnet_mask: "255.255.255.0",
-            },
-            {
-                ip_address: "192.168.4.9",
+                ip_address: "192.168.1.7",
                 subnet_mask: "255.255.255.0",
             },
         ],
@@ -44,7 +34,7 @@
         {
             text: "Set DHCP",
             class: "fa-solid fa-wand-magic-sparkles",
-            onClick: () => set_dhcp(nic.interface_name),
+            onClick: () => set_dhcp(preset.name),
         },
     ];
 </script>
@@ -65,31 +55,31 @@
 >
     <td>
         <div>
-            <span>{nic.interface_name} {nic.ip_is_dhcp ? "(DHCP)" : ""}</span>
+            <span>{preset.name} {preset.ip_is_dhcp ? "(DHCP)" : ""}</span>
         </div>
     </td>
     <td>
         <div>
-            {#each nic.ip_and_masks as ip_and_mask}
+            {#each preset.ip_and_masks as ip_and_mask}
                 <span>{ip_and_mask.ip_address}</span>
             {/each}
         </div>
     </td>
     <td>
         <div>
-            {#each nic.ip_and_masks as ip_and_mask}
+            {#each preset.ip_and_masks as ip_and_mask}
                 <span>{ip_and_mask.subnet_mask}</span>
             {/each}
         </div>
     </td>
     <td>
         <div>
-            <span>{nic.gateway || "-"}</span>
+            <span>{preset.gateway || "-"}</span>
         </div>
     </td>
     <td>
         <div>
-            {#each nic.dns_servers as dns_server}
+            {#each preset.dns_servers as dns_server}
                 <span>{dns_server}</span>
             {/each}
         </div>

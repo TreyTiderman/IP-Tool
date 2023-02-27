@@ -9,7 +9,7 @@ html {
   --char-width: 80ch;
 
   /* Margin, Padding, Gap */ 
-  --pad: 0.5rem;
+  --pad: 0.6rem;
   --gap: 1.0rem;
   --pad-input: var(--pad) calc(1.2*var(--pad));
 

@@ -1,8 +1,14 @@
 <script>
-    import { settings } from "../js/settings";
+    import { settings, default_settings } from "../js/settings";
+    let showReset = false;
 </script>
 
-<article class="mono" style="max-width: s500px;">
+<article
+    class="mono"
+    style="max-width: s500px;"
+    class:tableGridLines={$settings.tableGridLines}
+    class:alternatingRowBG={$settings.alternatingRowBG}
+>
     <table style="width: 100%;">
         <thead>
             <tr>
@@ -11,6 +17,43 @@
             </tr>
         </thead>
         <tbody>
+            <tr>
+                <td>defaultSettings</td>
+                <td>
+                    <button
+                        hidden={showReset}
+                        on:click={() => {
+                            showReset = true;
+                        }}
+                    >
+                        set
+                    </button>
+                    <button
+                        hidden={!showReset}
+                        style="color: var(--color-bg-red)"
+                        on:click={() => {
+                            showReset = false;
+                        }}
+                    >
+                        no cancel!
+                    </button>
+                    <button
+                        hidden={!showReset}
+                        style="color: var(--color-bg-green)"
+                        on:click={() => {
+                            showReset = false;
+                            $settings = default_settings;
+                            localStorage.setItem(
+                                "settings",
+                                JSON.stringify(default_settings)
+                            );
+                            location.reload(true);
+                        }}
+                    >
+                        reset settings to default?
+                    </button>
+                </td>
+            </tr>
             <tr>
                 <td>isAlwaysOnTop</td>
                 <td>
@@ -28,7 +71,8 @@
                 <td>
                     <button
                         on:click={() => {
-                            $settings.windowDecorations = !$settings.windowDecorations;
+                            $settings.windowDecorations =
+                                !$settings.windowDecorations;
                         }}
                     >
                         {$settings.windowDecorations}
@@ -39,7 +83,7 @@
                 <td>theme</td>
                 <td>
                     <select
-                        on:input={event => {
+                        on:input={(event) => {
                             $settings.theme = event.target.value;
                         }}
                     >
@@ -61,7 +105,7 @@
                         min="8"
                         placeholder="16"
                         value={$settings.fontSize}
-                        on:input={event => {
+                        on:input={(event) => {
                             $settings.fontSize = event.target.value;
                         }}
                     />
@@ -76,7 +120,7 @@
                         min="200"
                         placeholder="500"
                         value={$settings.ipPollRate_ms}
-                        on:input={event => {
+                        on:input={(event) => {
                             $settings.ipPollRate_ms = event.target.value;
                         }}
                     />
@@ -111,10 +155,24 @@
                 <td>
                     <button
                         on:click={() => {
-                            $settings.tableGridLines = !$settings.tableGridLines;
+                            $settings.tableGridLines =
+                                !$settings.tableGridLines;
                         }}
                     >
                         {$settings.tableGridLines}
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td>alternatingRowBG</td>
+                <td>
+                    <button
+                        on:click={() => {
+                            $settings.alternatingRowBG =
+                                !$settings.alternatingRowBG;
+                        }}
+                    >
+                        {$settings.alternatingRowBG}
                     </button>
                 </td>
             </tr>
@@ -132,11 +190,13 @@
         padding-bottom: 0;
     }
     th:nth-child(2) {
-        padding: 0 calc(var(--pad) + var(--pad) + .2rem);
+        padding: 0 calc(var(--pad) + var(--pad) + 0.2rem);
     }
     button,
     select,
     input {
         background-color: transparent;
+        min-width: 6rem;
+        text-align: left;
     }
 </style>
