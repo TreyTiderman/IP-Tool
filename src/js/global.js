@@ -3,12 +3,14 @@ import { Command } from "@tauri-apps/api/shell";
 
 // Check if app is ran as administrator
 async function checkAdmin() {
-    console.log("Check Admin");
     const cmd = new Command("net", "session");
     cmd.stderr.on("data", (line) => {
         if (line.startsWith("System error 5 has occurred")) {
             console.log("App is not running as Administrator");
-            global.update(async val => val.isAdministrator = false)
+            global.update(val => {
+                val.isAdministrator = false
+                return val
+            })
         }
     });
     await cmd.spawn();

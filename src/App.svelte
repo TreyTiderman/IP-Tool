@@ -21,7 +21,7 @@
     <Header />
     <div hidden={$global.isAdministrator}>
         <i class="fa-solid fa-circle-exclamation" />
-        Run as Administrator in order to change settings
+        Run as Administrator in order to change network settings
     </div>
     <Main />
 </div>
