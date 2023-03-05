@@ -1,12 +1,12 @@
 <script>
-    import { settings, default_settings } from "../js/settings";
+    import { settings, default_settings } from "../js/store_settings";
     let showReset = false;
 </script>
 
 <article
     class="mono"
-    style="max-width: s500px;"
     class:tableGridLines={$settings.tableGridLines}
+    class:colored_headers={$settings.colored_headers}
     class:alternatingRowBG={$settings.alternatingRowBG}
 >
     <table style="width: 100%;">
@@ -43,10 +43,7 @@
                         on:click={() => {
                             showReset = false;
                             $settings = default_settings;
-                            localStorage.setItem(
-                                "settings",
-                                JSON.stringify(default_settings)
-                            );
+                            localStorage.setItem("settings", JSON.stringify(default_settings));
                             location.reload(true);
                         }}
                     >
@@ -71,8 +68,7 @@
                 <td>
                     <button
                         on:click={() => {
-                            $settings.windowDecorations =
-                                !$settings.windowDecorations;
+                            $settings.windowDecorations = !$settings.windowDecorations;
                         }}
                     >
                         {$settings.windowDecorations}
@@ -155,8 +151,7 @@
                 <td>
                     <button
                         on:click={() => {
-                            $settings.tableGridLines =
-                                !$settings.tableGridLines;
+                            $settings.tableGridLines = !$settings.tableGridLines;
                         }}
                     >
                         {$settings.tableGridLines}
@@ -168,11 +163,22 @@
                 <td>
                     <button
                         on:click={() => {
-                            $settings.alternatingRowBG =
-                                !$settings.alternatingRowBG;
+                            $settings.alternatingRowBG = !$settings.alternatingRowBG;
                         }}
                     >
                         {$settings.alternatingRowBG}
+                    </button>
+                </td>
+            </tr>
+            <tr>
+                <td>colored_headers</td>
+                <td>
+                    <button
+                        on:click={() => {
+                            $settings.colored_headers = !$settings.colored_headers;
+                        }}
+                    >
+                        {$settings.colored_headers}
                     </button>
                 </td>
             </tr>

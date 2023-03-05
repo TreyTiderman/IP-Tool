@@ -1,5 +1,6 @@
 <script>
-    import { set_dhcp } from "../js/tauri";
+    import { set_dhcp, set_preset } from "../js/tauri";
+    import { ipv4 } from "../js/store_ipv4";
     import ContextMenu from "./ContextMenu.svelte";
 
     // Event Dispatcher
@@ -32,9 +33,17 @@
             text: "hr",
         },
         {
-            text: "Set DHCP",
-            class: "fa-solid fa-wand-magic-sparkles",
-            onClick: () => set_dhcp(preset.name),
+            text: "Set Selected Inteface",
+            class: "fa-solid fa-check",
+            onClick: () => set_preset($ipv4.interface_active.interface_name, $ipv4.preset_active),
+        },
+        {
+            text: "hr",
+        },
+        {
+            text: "Delete Preset",
+            class: "fa-solid fa-trash",
+            onClick: () => dispatch("delete"),
         },
     ];
 </script>
@@ -117,16 +126,26 @@
     td > div > span {
         padding: var(--pad);
     }
-    /* tr.selected { */
-        /* color: var(--color-text-bright); */
-        /* background-color: var(--color-text-yellow); */
-        /* color: var(--color-bg-yellow); */
-        /* box-shadow: inset 0px 0px 0px var(--border-thickness) var(--color-bg-yellow); */
-    /* } */
+
+    tr.selected {
+        /* background-color: var(--color-text-orange); */
+        /* color: var(--color-bg-orange); */
+        box-shadow: inset 0px 0px 0px var(--border-thickness) var(--color-bg-orange);
+    }
+    /* tr.selected > td:first-child > div > span {
+        padding: calc(var(--pad)/2) calc(3*var(--pad)/4);
+        margin: calc(var(--pad)/2) calc(var(--pad)/4);
+        width: fit-content;
+        border-radius: var(--radius-lg);
+
+        background-color: var(--color-bg-orange);
+        color: var(--color-text-orange);
+    } */
 
     button {
         padding: var(--pad);
         background-color: transparent;
+        color: inherit;
         border-radius: 0;
     }
 </style>

@@ -1,5 +1,5 @@
 <script>
-    import { global } from "../js/global";
+    import { state } from "../js/store_state";
 
     // Components
     import IP_Presets from "../pages/IPv4.svelte";
@@ -8,11 +8,11 @@
 </script>
 
 <main>
-    {#if $global.tabActive === $global.tabs[0]}
+    {#if $state.nav_tab_active === $state.nav_tabs[0]}
         <IP_Presets/>
-    {:else if $global.tabActive === $global.tabs[1]}
+    {:else if $state.nav_tab_active === $state.nav_tabs[1]}
         <Routes/>
-    {:else if $global.tabActive === $global.tabs[2]}
+    {:else if $state.nav_tab_active === $state.nav_tabs[2]}
         <Settings/>
     {/if}
 </main>

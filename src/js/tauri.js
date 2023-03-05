@@ -83,3 +83,28 @@ export async function set_static(nic, ip, mask, gateway, dns_1, dns_2) {
     });
     return output;
 }
+export async function set_preset(interface_name, preset) {
+    for (let i = 0; i < preset.ip_and_masks.length; i++) {
+        const ip_and_mask = preset.ip_and_masks[i];
+        if (i === 0) {
+            set_ip_static(
+                interface_name,
+                ip_and_mask.ip_address,
+                ip_and_mask.subnet_mask,
+                preset.gateway
+            );
+        } else {
+            add_ip_static(
+                interface_name,
+                ip_and_mask.ip_address,
+                ip_and_mask.subnet_mask
+            );
+        }
+    }
+    const output = set_dns_static(
+        interface_name,
+        preset.dns_servers[0],
+        preset.dns_servers[1]
+    );
+    return output;
+}

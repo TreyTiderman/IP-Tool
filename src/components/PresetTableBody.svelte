@@ -5,92 +5,43 @@
         add_ip_static,
         set_dns_static,
     } from "../js/tauri";
-    import { settings } from "../js/settings";
+    import { ipv4 } from "../js/store_ipv4";
     import PresetTableRow from "./PresetTableRow.svelte";
     import PresetTableRowEdit from "./PresetTableRowEdit.svelte";
 
     // Event Dispatcher
     import { createEventDispatcher } from "svelte";
     const dispatch = createEventDispatcher();
-
-    // Variables
-    let presetEdit = false;
-    let presetSelected = "default_198";
-    export let presets = [
-        {
-            name: "DHCP",
-            gateway: "-",
-            ip_is_dhcp: true,
-            ip_and_masks: [
-                {
-                    ip_address: "-",
-                    subnet_mask: "-",
-                },
-            ],
-            dns_is_dhcp: true,
-            dns_servers: ["-"],
-        },
-        {
-            name: "default_0",
-            gateway: "192.168.0.1",
-            ip_is_dhcp: false,
-            ip_and_masks: [
-                {
-                    ip_address: "192.168.0.7",
-                    subnet_mask: "255.255.255.0",
-                },
-            ],
-            dns_is_dhcp: false,
-            dns_servers: ["192.168.0.1"],
-        },
-    ];
 </script>
 
 <tbody>
-    {#each presets as preset}
-        {#if presetSelected === preset.name && presetEdit}
+    {#each $ipv4.presets as preset}
+        {#if $ipv4.preset_active.name === preset.name && $ipv4.preset_editing}
             <PresetTableRowEdit
                 {preset}
                 on:confirm={(edit) => {
-                    presetEdit = false;
+                    $ipv4.preset_editing = false;
                     console.log("edit confimed", edit.detail);
-                    for (let i = 0; i < edit.detail.ip_and_masks.length; i++) {
-                        const ip_and_mask = edit.detail.ip_and_masks[i];
-                        if (i === 0) {
-                            set_ip_static(
-                                edit.detail.name,
-                                ip_and_mask.ip_address,
-                                ip_and_mask.subnet_mask,
-                                edit.detail.gateway
-                            );
-                        } else {
-                            add_ip_static(
-                                edit.detail.name,
-                                ip_and_mask.ip_address,
-                                ip_and_mask.subnet_mask
-                            );
-                        }
-                    }
-                    set_dns_static(
-                        edit.detail.name,
-                        edit.detail.dns_servers[0],
-                        edit.detail.dns_servers[1]
-                    );
+                    preset = edit.detail
+                    $ipv4.preset_active = edit.detail
                 }}
                 on:cancel={() => {
-                    presetEdit = false;
+                    $ipv4.preset_editing = false;
                 }}
             />
         {:else}
             <PresetTableRow
                 {preset}
-                selected={presetSelected === preset.name}
+                selected={$ipv4.preset_active.name === preset.name}
                 on:edit={() => {
-                    presetEdit = true;
+                    $ipv4.preset_editing = true;
                 }}
                 on:select={() => {
-                    presetEdit = false;
-                    presetSelected = preset.name;
+                    $ipv4.preset_editing = false;
+                    $ipv4.preset_active = preset;
+                }}
+                on:delete={() => {
+                    $ipv4.presets = $ipv4.presets.filter(p => p.name !== preset.name);
                 }}
             />
         {/if}

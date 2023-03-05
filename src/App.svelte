@@ -1,25 +1,25 @@
 <script>
     // Imports
-    import { global } from "./js/global";
-    import { settings } from "./js/settings";
+    import { state } from "./js/store_state";
+    import { settings } from "./js/store_settings";
 
     // Components
     import Header from "./layout/Header.svelte";
     import Main from "./layout/Main.svelte";
 
     // Debug
-    $: console.log("global", $global);
+    // $: console.log("$state", $state)
 </script>
 
 <div
     id="app"
     style="
         border: {$settings.hasDecorations ? 'none' : 'var(--border)'};
-        border-color: {$global.isAdministrator ? ' ' : 'var(--color-bg-red)'};
+        border-color: {$state.is_administrator ? ' ' : 'var(--color-bg-red)'};
     "
 >
     <Header />
-    <div hidden={$global.isAdministrator}>
+    <div hidden={$state.is_administrator}>
         <i class="fa-solid fa-circle-exclamation" />
         Run as Administrator in order to change network settings
     </div>

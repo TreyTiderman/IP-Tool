@@ -68,6 +68,7 @@
     button {
         padding: var(--pad);
         background-color: transparent;
+        color: inherit;
         border-radius: 0;
     }
 </style>

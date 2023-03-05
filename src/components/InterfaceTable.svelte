@@ -1,40 +1,44 @@
 <script>
     import { get_interfaces } from "../js/tauri";
-    import { settings } from "../js/settings";
+    import { ipv4 } from "../js/store_ipv4";
+    import { settings } from "../js/store_settings";
     import InterfaceTableHeader from "../components/InterfaceTableHeader.svelte";
     import InterfaceTableBody from "../components/InterfaceTableBody.svelte";
 
-    let interfaces = [];
+    async function poll_interfaces() {
+        const interfaces = await get_interfaces();
+        if (JSON.stringify($ipv4.interfaces) !== JSON.stringify(interfaces)) {
+            $ipv4.interfaces = interfaces;
+        }
+    }
 
     let interval;
     import { onDestroy, onMount } from "svelte";
     onMount(async () => {
-        interfaces = await get_interfaces();
+        // Initial
+        await poll_interfaces();
+        $ipv4.interface_active = $ipv4.interfaces[0];
+
+        // Poll
         interval = setInterval(async () => {
-            interfaces = await get_interfaces();
+            await poll_interfaces();
         }, $settings.ipPollRate_ms);
     });
     onDestroy(async () => {
-        interfaces = await get_interfaces();
         clearInterval(interval);
     });
 </script>
 
 <!-- Interface Table -->
-<table
-    id="interface_table"
-    class:fixedColumns={$settings.fixedColumns}
-    class:tableGridLines={$settings.tableGridLines}
->
+<table id="interface_table">
     <InterfaceTableHeader
         on:get_interfaces={async () => {
-            interfaces = await get_interfaces();
+            await poll_interfaces();
         }}
     />
     <InterfaceTableBody
-        bind:interfaces
         on:get_interfaces={async () => {
-            interfaces = await get_interfaces();
+            await poll_interfaces();
         }}
     />
 </table>

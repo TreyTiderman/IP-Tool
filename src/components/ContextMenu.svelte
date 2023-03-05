@@ -70,7 +70,7 @@
 {#if menu?.show}
     <nav
         use:getContextMenuDimensions
-        style="position: absolute; top:{menu.position.y}px; left:{menu.position.x}px; z-index: 99"
+        style="top:{menu.position.y}px; left:{menu.position.x}px; z-index: 99"
     >
         <div class="navbar">
             {#each items as item, index}
@@ -101,6 +101,10 @@
         flex-direction: column;
         padding: var(--pad);
         padding: calc(var(--pad)/2);
+    }
+    nav {
+        position: fixed;
+        position: absolute;
     }
     button {
         text-align: left;

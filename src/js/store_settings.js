@@ -18,11 +18,12 @@ export const default_settings = {
     "tableGridLines": false,
     "alternatingRowBG": false,
     "ipPollRate_ms": 1000,
+    "colored_headers": true,
 };
 let settingsLocalStorage = localStorage.getItem("settings");
-if (settingsLocalStorage === null || settingsLocalStorage === undefined || settingsLocalStorage === "") {
+if (settingsLocalStorage == null || settingsLocalStorage === "") {
     settingsLocalStorage = default_settings
-    console.log("NO stored settings. Setting to default", default_settings);
+    console.log("settings: Nothing in localSorage. Setting to default", default_settings);
     settings.set(default_settings);
     localStorage.setItem("settings", JSON.stringify(default_settings));
 }
@@ -32,7 +33,7 @@ else {
     settings.update(obj => {
         Object.keys(default_settings).forEach(key => {
             if (obj[key] === undefined) {
-                console.log(`Setting ${key} doesn't exist in localStorage. Set to default ${default_settings[key]}`);
+                console.log(`setting: ${key} doesn't exist in localStorage. Setting to default ${default_settings[key]}`);
                 obj[key] = default_settings[key];
             }
         })
@@ -43,7 +44,7 @@ else {
 // Every settings change set the values 
 settings.subscribe(async settings => {
     if (settings !== undefined && settings != default_settings) {
-        console.log("Settings updated", settings);
+        console.log("settings: updated", settings);
 
         // Update Settings
         appWindow.setAlwaysOnTop(settings.isAlwaysOnTop);

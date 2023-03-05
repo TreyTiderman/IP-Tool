@@ -1,7 +1,7 @@
 <script>
     // Imports
-    import { global } from "../js/global";
-    import { settings } from "../js/settings";
+    import { state } from "../js/store_state";
+    import { settings } from "../js/store_settings";
     import { appWindow } from "@tauri-apps/api/window";
 
     // Variables
@@ -11,15 +11,15 @@
         $settings.isAlwaysOnTop = !$settings.isAlwaysOnTop;
     }
     function tabChange(tab) {
-        $global.tabActive = tab;
+        $state.nav_tab_active = tab;
     }
 </script>
 
 <header>
-    {#each $global.tabs as tab}
+    {#each $state.nav_tabs as tab}
         <button
             class="tab"
-            class:tab_active={tab === $global.tabActive}
+            class:tab_active={tab === $state.nav_tab_active}
             on:click={() => tabChange(tab)}
         >
             {tab}
