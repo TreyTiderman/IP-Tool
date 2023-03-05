@@ -42,6 +42,11 @@ npm run tauri build
 - [ ] row moving
 - [ ] table sorting
 - [ ] routes page
+- [ ] Network Scan page
+
+### Network Scan
+
+https://crates.io/crates/netscan
 
 ### Force Admin
 
