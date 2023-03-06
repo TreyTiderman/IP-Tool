@@ -56,6 +56,8 @@
 
 <style>
     th {
+        background-color: var(--color-bg-input);
+        color: var(--color-text-bright);
         min-width: fit-content;
         padding: 0;
     }

@@ -61,7 +61,9 @@
     on:any_click={() => contextMenu.hide()}
     on:any_contextmenu={() => contextMenu.hide()}
 />
-<tr
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div
+    class="row"
     class:selected
     on:click={() => dispatch("select")}
     on:contextmenu|preventDefault={(event) => {
@@ -107,48 +109,8 @@
             </button>
         </div>
     </td>
-</tr>
+</div>
 
 <style>
-    td {
-        padding: 0;
-        vertical-align: top;
-    }
-    td {
-        min-width: fit-content;
-    }
-
-    td:last-child {
-        min-width: 2rem;
-    }
-    td > div {
-        display: grid;
-        gap: 0;
-    }
-    td:last-child > div {
-        padding: 0;
-        gap: 0;
-    }
-
-    td > div > span {
-        padding: var(--pad);
-    }
-
-    tr.selected {
-        /* background-color: var(--color-text-purple);
-        color: var(--color-bg-purple); */
-        
-        background-color: var(--color-bg-input);
-        color: var(--color-text-bright);
-
-        /* outline: var(--border);
-        outline-color: var(--color-text-dim);
-        outline-offset: calc(var(--border-thickness) * -1); */
-    }
-
-    button {
-        padding: var(--pad);
-        background-color: transparent;
-        border-radius: 0;
-    }
+    
 </style>
