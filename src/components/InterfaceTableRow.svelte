@@ -135,19 +135,12 @@
     }
 
     tr.selected {
-        /* background-color: var(--color-text-orange); */
-        /* color: var(--color-bg-orange); */
-        box-shadow: inset 0px 0px 0px var(--border-thickness) var(--color-bg-purple);
+        /* background-color: var(--color-text-purple);
+        color: var(--color-bg-purple); */
+        
+        background-color: var(--color-bg-input);
+        color: var(--color-text-bright);
     }
-    /* tr.selected > td:first-child > div > span {
-        padding: calc(var(--pad)/2) calc(3*var(--pad)/4);
-        margin: calc(var(--pad)/2) calc(var(--pad)/4);
-        width: fit-content;
-        border-radius: var(--radius-lg);
-
-        background-color: var(--color-bg-purple);
-        color: var(--color-text-purple);
-    } */
 
     button {
         padding: var(--pad);

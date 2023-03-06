@@ -184,6 +184,44 @@
             </tr>
         </tbody>
     </table>
+    <br>
+    <table style="width: 100%;">
+        <thead>
+            <tr>
+                <th>Shortcut</th>
+                <th>Key(s)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>
+                    <span>Zoom in</span>
+                </td>
+                <td>
+                    <code>Control</code>
+                    <code>=</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Zoom out</span>
+                </td>
+                <td>
+                    <code>Control</code>
+                    <code>-</code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Toggle isAlwaysOnTop</span>
+                </td>
+                <td>
+                    <code>Control</code>
+                    <code>p</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </article>
 
 <style>
@@ -191,7 +229,9 @@
         padding: var(--pad);
         max-width: fit-content;
     }
-    td {
+    table:first-child > tbody > tr > td {
+        padding-top: calc(var(--pad)/2);
+        padding-bottom: calc(var(--pad)/2);
         padding-top: 0;
         padding-bottom: 0;
     }
@@ -204,5 +244,14 @@
         background-color: transparent;
         min-width: 6rem;
         text-align: left;
+    }
+    
+    code {
+        font-size: 1rem;
+        background-color: var(--color-bg-dim);
+        background-color: transparent;
+        color: var(--color-text-input);
+        padding: .3rem var(--pad);
+        border: var(--border);
     }
 </style>

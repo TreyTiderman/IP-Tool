@@ -128,19 +128,16 @@
     }
 
     tr.selected {
-        /* background-color: var(--color-text-orange); */
-        /* color: var(--color-bg-orange); */
-        box-shadow: inset 0px 0px 0px var(--border-thickness) var(--color-bg-orange);
-    }
-    /* tr.selected > td:first-child > div > span {
-        padding: calc(var(--pad)/2) calc(3*var(--pad)/4);
-        margin: calc(var(--pad)/2) calc(var(--pad)/4);
-        width: fit-content;
-        border-radius: var(--radius-lg);
+        /* background-color: var(--color-text-orange);
+        color: var(--color-bg-orange); */
+        
+        background-color: var(--color-bg-input);
+        color: var(--color-text-bright);
 
-        background-color: var(--color-bg-orange);
-        color: var(--color-text-orange);
-    } */
+        outline: var(--border);
+        /* outline-color: var(--color-text-dim); */
+        outline-offset: calc(var(--border-thickness) * -1);
+    }
 
     button {
         padding: var(--pad);

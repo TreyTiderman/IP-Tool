@@ -1,6 +1,5 @@
 <script>
     // Components
-    import UpDown from "./UpDown.svelte";
     import ContextMenu from "./ContextMenu.svelte";
 
     // Event Dispatcher
@@ -40,15 +39,16 @@
 </thead>
 
 <style>
+    /* thead {} */
     th {
         min-width: fit-content;
         padding: 0;
     }
-    span {
-        padding: 0 var(--pad);
-    }
     th:last-child {
         min-width: 2rem;
+    }
+    span {
+        padding: 0 var(--pad);
     }
     button {
         padding: var(--pad);

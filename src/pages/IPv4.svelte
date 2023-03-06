@@ -19,7 +19,6 @@
     class:alternatingRowBG={$settings.alternatingRowBG}
 >
     <InterfaceTable />
-    <!-- <br /> -->
     <PresetTable />
 </article>
 
@@ -28,7 +27,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: var(--gap);
-        column-gap: calc(var(--gap) * 4);
+        column-gap: calc(var(--gap) * 1);
         justify-content: flex-start;
         margin: var(--pad);
         align-items: flex-start;
@@ -38,29 +37,66 @@
     :global(.alternatingRowBG > table > tbody > tr:nth-child(even)) {
         background-color: var(--color-bg-section);
     }
-    :global(.colored_headers table:first-child > thead > tr:nth-child(1)) {
+
+    /* Setting colored_headers */
+    :global(.colored_headers table:nth-child(1) > thead > tr) {
         background-color: var(--color-bg-purple);
         color: var(--color-text-purple);
     }
-    :global(.colored_headers thead tr:nth-child(1)) {
+    :global(.colored_headers table:nth-child(2) > thead > tr) {
         background-color: var(--color-bg-orange);
         color: var(--color-text-orange);
     }
+    :global(.colored_headers tr.selected) {
+        outline: var(--border);
+        outline-color: var(--color-bg-purple);
+        outline-style: dashed;
+        outline-offset: calc(var(--border-thickness) * -1);
+    }
+    :global(.colored_headers table:nth-child(1) > thead > tr > th) {
+        border: none;
+        outline: var(--border);
+        outline-color: var(--color-bg-purple);
+        outline-offset: calc(var(--border-thickness) * -1);
+    }
+    :global(.colored_headers table:nth-child(2) > thead > tr > th) {
+        border: none;
+        outline: var(--border);
+        outline-color: var(--color-bg-orange);
+        outline-offset: calc(var(--border-thickness) * -1);
+    }
+    /* :global(.colored_headers th) {
+        border: none;
+        outline: var(--border);
+        outline-color: var(--color-bg-purple);
+        outline-offset: calc(var(--border-thickness) * -1);
+    }
+    :global(.colored_headers tr:nth-child(1) th) {
+        border: none;
+        outline: var(--border);
+        outline-color: var(--color-bg-orange);
+        outline-offset: calc(var(--border-thickness) * -1);
+    } */
 
     /* Setting fixedColumns */
     :global(.fixedColumns th),
     :global(.fixedColumns td) {
         min-width: 10.75rem;
+        max-width: 10.75rem;
+        overflow: auto;
+    }
+    :global(.fixedColumns td::-webkit-scrollbar) {
+        display: none;
     }
 
     /* Setting tableGridLines */
-    :global(.tableGridLines table) {
-        border: var(--border);
-    }
     :global(.tableGridLines th),
     :global(.tableGridLines td) {
         border: var(--border);
+        /* border: none; */
+        /* box-shadow: inset 0px 0px 0px calc(var(--border-thickness) / 2) var(--color-border); */
+    }
+    :global(.tableGridLines td nav) {
         border: none;
-        box-shadow: inset 0px 0px 0px calc(var(--border-thickness) / 2) var(--color-border);
     }
 </style>

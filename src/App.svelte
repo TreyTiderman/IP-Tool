@@ -6,6 +6,7 @@
     // Components
     import Header from "./layout/Header.svelte";
     import Main from "./layout/Main.svelte";
+    import KeyboardShortcuts from "./layout/KeyboardShortcuts.svelte";
 
     // Debug
     // $: console.log("$state", $state)
@@ -25,6 +26,7 @@
     </div>
     <Main />
 </div>
+<KeyboardShortcuts />
 
 <style>
     #app {

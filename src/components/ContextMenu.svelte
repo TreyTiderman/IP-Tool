@@ -9,8 +9,8 @@
         position: { x: 0, y: 0 },
         size: { h: 0, w: 0 },
         showAtEvent: (event) => {
+            console.log("showAtEvent", event);
             if (event.pointerId === -1) {
-                console.log("showAtEvent", event);
                 console.log("target", event.target.getBoundingClientRect());
                 const buttonPosition = event.target.getBoundingClientRect();
                 menu.position = { x: buttonPosition.x, y: buttonPosition.y + buttonPosition.height };
@@ -22,6 +22,7 @@
             setTimeout(() => menu.show = true, 10);
         },
         showAtXY: (x, y) => {
+            console.log("showAtXY", x, y);
             menu.position = { x: x, y: y };
             checkBounds();
             setTimeout(() => menu.show = true, 10);
@@ -70,7 +71,7 @@
 {#if menu?.show}
     <nav
         use:getContextMenuDimensions
-        style="top:{menu.position.y}px; left:{menu.position.x}px; z-index: 99"
+        style="top:{menu.position.y}px; left:{menu.position.x}px;"
     >
         <div class="navbar">
             {#each items as item, index}
@@ -105,6 +106,7 @@
     nav {
         position: fixed;
         position: absolute;
+        z-index: 99;
     }
     button {
         text-align: left;
