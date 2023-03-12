@@ -33,6 +33,9 @@
         margin: var(--pad);
         align-items: flex-start;
     }
+    :global(th) {
+        border: none;
+    }
 
     /* Setting alternatingRowBG */
     :global(.alternatingRowBG > table > tbody > tr:nth-child(even)) {

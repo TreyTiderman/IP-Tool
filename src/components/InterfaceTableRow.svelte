@@ -116,8 +116,12 @@
     }
     td {
         min-width: fit-content;
+        max-width: 10rem;
+        overflow: scroll;
     }
-
+    td::-webkit-scrollbar {
+        display: none;
+    }
     td:last-child {
         min-width: 2rem;
     }
