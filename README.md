@@ -5,9 +5,9 @@ For people that plug into a lot of networks
 
 ### Download
 
-[Installer](https://github.com/TreyTiderman/IP-Tool/releases/download/v0.2.0/IP-Tool_0.2.0_Installer.msi)
+[Installer](https://github.com/TreyTiderman/IP-Tool/releases/download/v0.2.0/IP-Tool_0.2.1_Installer.msi)
 /
-[Portable](https://github.com/TreyTiderman/IP-Tool/releases/download/v0.2.0/IP-Tool_0.2.0_Portable.exe)
+[Portable](https://github.com/TreyTiderman/IP-Tool/releases/download/v0.2.0/IP-Tool_0.2.1_Portable.exe)
 
 ![Preview UI](./public/preview.png)
 
