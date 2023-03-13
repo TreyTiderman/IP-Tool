@@ -1,5 +1,5 @@
 <script>
-    import { set_preset } from "../js/tauri"
+    import { set_preset, set_interface_name } from "../js/tauri"
     import { ipv4 } from "../js/store_ipv4"
     import InterfaceTableRow from "./InterfaceTableRow.svelte"
     import InterfaceTableRowEdit from "./InterfaceTableRowEdit.svelte"
@@ -14,6 +14,10 @@
                     $ipv4.interface_editing = false
                     console.log("edit confimed", edit.detail)
                     set_preset(nic.interface_name, edit.detail)
+                    if (nic.interface_name !== edit.detail.interface_name) {
+                        console.log("set_interface_name", nic.interface_name, edit.detail.interface_name)
+                        set_interface_name(nic.interface_name, edit.detail.interface_name)
+                    }
                 }}
                 on:cancel={() => {
                     $ipv4.interface_editing = false

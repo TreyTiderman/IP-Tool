@@ -32,6 +32,7 @@ fn main() {
             invoke::set_static,
             invoke::set_metric,
             invoke::set_metric_auto,
+            invoke::set_interface_name,
         ])
         .plugin(tauri_plugin_autostart::init(
             MacosLauncher::LaunchAgent,

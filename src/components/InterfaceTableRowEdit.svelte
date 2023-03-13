@@ -159,7 +159,13 @@
 >
     <td>
         <div>
-            <span>{edit.interface_name} {nic.ip_is_dhcp ? "(DHCP)" : ""}</span>
+            <!-- <span>{edit.interface_name} {nic.ip_is_dhcp ? "(DHCP)" : ""}</span> -->
+            <input
+                type="text"
+                maxlength="20"
+                size={edit.interface_name.length || "1"}
+                bind:value={edit.interface_name}
+            />
         </div>
     </td>
     <td>

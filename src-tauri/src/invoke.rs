@@ -96,3 +96,10 @@ pub fn set_metric_auto(interface: &str) -> bool {
     let output = netsh::set_metric_auto(interface);
     output
 }
+
+#[tauri::command]
+pub fn set_interface_name(interface: &str, interface_new_name: &str) -> bool {
+    println!("set_interface_name {interface} {interface_new_name}");
+    let output = netsh::set_interface_name(interface, interface_new_name);
+    output
+}

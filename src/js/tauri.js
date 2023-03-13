@@ -108,3 +108,10 @@ export async function set_preset(interface_name, preset) {
     );
     return output;
 }
+export async function set_interface_name(nic, new_name) {
+    const output = await invoke("set_interface_name", {
+        interface: nic,
+        interfaceNewName: new_name
+    });
+    return output;
+}

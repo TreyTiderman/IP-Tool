@@ -253,7 +253,13 @@ pub fn set_metric(interface: &str, metric: &str) -> bool {
 }
 pub fn set_metric_auto(interface: &str) -> bool {
     // netsh interface ipv4 set interface "Ethernet" metric=auto
-    let args = format!("interface ipv4 set interface \"{interface}\"metric=auto");
+    let args = format!("interface ipv4 set interface \"{interface}\" metric=auto");
+    let success = netsh_cmd_bool(args.as_str());
+    success
+}
+pub fn set_interface_name(interface: &str, interface_new_name: &str) -> bool {
+    // netsh interface set interface name="Ethernet" newname="New Ethernet"
+    let args = format!("interface set interface name=\"{interface}\" newname=\"{interface_new_name}\"");
     let success = netsh_cmd_bool(args.as_str());
     success
 }
